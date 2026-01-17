@@ -1,0 +1,22 @@
+cat << 'EOF' > .gitignore
+# macOS
+.DS_Store
+
+# JetBrains (PhpStorm / WebStorm)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# PHP / Composer
+/vendor/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+EOF
