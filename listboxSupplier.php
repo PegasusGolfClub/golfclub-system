@@ -22,7 +22,7 @@ if (!$result) {
     die ('Query failed: ' . mysqli_error($conn));
 }
 
-echo "<select name='supplierName' class='listbox' id='supplierName' size='5'>";
+echo "<select name='supplierName' class='listbox' id='supplierName'>";
 
 // creating a loop for the query
 while ($row = mysqli_fetch_array($result)) {
@@ -35,6 +35,7 @@ while ($row = mysqli_fetch_array($result)) {
         ? 'selected'
         : '';
 
+//    echoing out the values in options
     echo "<option value='$supplierId|$supplierName' $selected>$supplierName</option>";
 }
 

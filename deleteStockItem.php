@@ -23,6 +23,7 @@ Purpose: To complete the group project
 
 <body>
 
+<!-- include the sidebar stock file -->
 <?php include 'sidebar_stock.php' ?>
 
 <!-- Main Content Area -->
@@ -31,8 +32,6 @@ Purpose: To complete the group project
         <div class="card" id="cardDelete">
             <h2>Delete stock item</h2>
             <form action="deleteStockItemDisplay.php" id="displayStockForm" method="post">
-                <input type="hidden" name="choice">
-                <input type="hidden" name="stockItemId">
                 <input type="hidden" name="stockNum">
                 <input type="hidden" name="description">
             </form>
@@ -75,44 +74,45 @@ Purpose: To complete the group project
 
                 <h2>Stock item details</h2>
                 <div class="container__info">
+                    <div id="display" class="display_error">There are no matches found</div>
                     <!-- creating confirmation details section -->
+                    <input type="hidden" id="stockIdInput" name="stockIdCell">
+                    <input type="hidden" id="descriptionInput" name="descriptionCell">
+                    <input type="hidden" id="qtyInput" name="qtyInStockCell">
+                    <input type="hidden" id="reOrderLevelInput" name="reOrderLevelCell">
+                    <input type="hidden" id="reOrderQtyInput" name="reOrderQtyCell">
+                    <input type="hidden" id="costPriceInput" name="costPriceCell">
+                    <input type="hidden" id="retailPriceInput" name="retailPriceCell">
+                    <input type="hidden" id="supplierNameInput" name="supplierNameCell">
+                    <input type="hidden" id="orderNumInput" name="orderNumCell">
+                    <input type="hidden" id="deliveredInput" name="deliveredCell">
                     <div class="confirmation__details">
-                        <?php
-                        if (isset($_SESSION['stockId'])) {
-                            ?>
-                            <table>
-                                <tr class="cnf-h-row">
-                                    <th class="cnf-h-cell">Stock Id</th>
-                                    <th class="cnf-h-cell">Description</th>
-                                    <th class="cnf-h-cell">Quantity in stock</th>
-                                    <th class="cnf-h-cell">Re-order Level</th>
-                                    <th class="cnf-h-cell">Re-order quantity</th>
-                                    <th class="cnf-h-cell">Cost price</th>
-                                    <th class="cnf-h-cell">Retail price</th>
-                                    <th class="cnf-h-cell">Supplier Name</th>
-                                    <th class="cnf-h-cell">Order number</th>
-                                    <th class="cnf-h-cell">delivered</th>
-                                </tr>
-                                <tr>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['stockId'] ?? '') ?></td>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['description'] ?? '') ?></td>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['qtyInStock'] ?? '') ?></td>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['reOrderLevel'] ?? '') ?></td>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['reOrderQty'] ?? '') ?></td>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['costPrice'] ?? '') ?></td>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['retailPrice'] ?? '') ?></td>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['supplierName'] ?? '') ?></td>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['stockNumOrder'] ?? '') ?></td>
-                                    <td class="cnf-i-cell"><?= htmlspecialchars($_SESSION['delivered'] ?? '') ?></td>
-                                </tr>
-                            </table>
-                            <?php
-                        } else {
-                            ?>
-                            <p>No matches found or more than one result with these details exist</p>
-                            <?php
-                        }
-                        ?>
+                        <table>
+                            <tr class="cnf-h-row">
+                                <th class="cnf-h-cell">Stock Id</th>
+                                <th class="cnf-h-cell">Description</th>
+                                <th class="cnf-h-cell">Quantity in stock</th>
+                                <th class="cnf-h-cell">Re-order Level</th>
+                                <th class="cnf-h-cell">Re-order quantity</th>
+                                <th class="cnf-h-cell">Cost price</th>
+                                <th class="cnf-h-cell">Retail price</th>
+                                <th class="cnf-h-cell">Supplier Name</th>
+                                <th class="cnf-h-cell">Order number</th>
+                                <th class="cnf-h-cell">delivered</th>
+                            </tr>
+                            <tr>
+                                <td class="cnf-i-cell" id="stockIdCell"><?php echo htmlspecialchars($_SESSION['stockId'] ?? '') ?></td>
+                                <td class="cnf-i-cell" id="descriptionCell"><?php echo htmlspecialchars($_SESSION['description'] ?? '') ?></td>
+                                <td class="cnf-i-cell" id="qtyInStockCell"><?php echo htmlspecialchars($_SESSION['qtyInStock'] ?? '') ?></td>
+                                <td class="cnf-i-cell" id="reOrderLevelCell"><?php echo htmlspecialchars($_SESSION['reOrderLevel'] ?? '') ?></td>
+                                <td class="cnf-i-cell" id="reOrderQtyCell"><?php echo htmlspecialchars($_SESSION['reOrderQty'] ?? '') ?></td>
+                                <td class="cnf-i-cell" id="costPriceCell"><?php echo htmlspecialchars($_SESSION['costPrice'] ?? '') ?></td>
+                                <td class="cnf-i-cell" id="retailPriceCell"><?php echo htmlspecialchars($_SESSION['retailPrice'] ?? '') ?></td>
+                                <td class="cnf-i-cell" id="supplierNameCell"><?php echo htmlspecialchars($_SESSION['supplierName'] ?? '') ?></td>
+                                <td class="cnf-i-cell" id="orderNumCell"><?php echo htmlspecialchars($_SESSION['orderNum'] ?? '') ?></td>
+                                <td class="cnf-i-cell" id="deliveredCell"><?php echo htmlspecialchars($_SESSION['delivered'] ?? '') ?></td>
+                            </tr>
+                        </table>
 
                     </div>
                 </div>
@@ -129,19 +129,57 @@ Purpose: To complete the group project
 </main>
 
 <script>
-
+    const submitDeleteStock = document.getElementById("submitDeleteStock");
     const stockForm = document.getElementById('stockForm');
 
-    stockForm.addEventListener('submit', (e) => {
-        const qtyInStock = <?= isset($_SESSION['qtyInStock']) ? (int)$_SESSION['qtyInStock'] : 0 ?>;
+    <?php if (isset($_SESSION['stockId'])) { ?>
+    let options = document.querySelectorAll('#stockItem option');
+    options.forEach(opt => {
+        if (opt.value.startsWith(<?php echo $_SESSION['stockId']?> + "|")) {
+            opt.selected = true;
+        }
+    });
 
-        const isOnOrder = <?=
-                (isset($_SESSION['stockNumOrder'], $_SESSION['stockId'], $_SESSION['delivered'])
-                        && $_SESSION['stockNumOrder'] == $_SESSION['stockId']
-                        && !$_SESSION['delivered'])
-                        ? 'true'
-                        : 'false'
-                ?>;
+    if (document.getElementById('stockIdCell').innerHTML !== "") {
+        submitDeleteStock.classList.add('open');
+    } else {
+        submitDeleteStock.classList.remove('open')
+    }
+
+    document.getElementById('display').style.display = "none";
+    <?php
+    unset($_SESSION['stockId']);
+    unset($_SESSION['description']);
+    unset($_SESSION['qtyInStock']);
+    unset($_SESSION['reOrderLevel']);
+    unset($_SESSION['reOrderQty']);
+    unset($_SESSION['costPrice']);
+    unset($_SESSION['retailPrice']);
+    unset($_SESSION['supplierId']);
+    unset($_SESSION['supplierName']);
+    unset($_SESSION['orderNum']);
+    unset($_SESSION['delivered']);
+
+    } else { ?>
+        document.getElementById('display').style.display = "block";
+    <?php }; ?>
+
+    const selectStockItem = document.getElementById('stockItem')
+
+    stockForm.addEventListener('submit', (e) => {
+        let qtyInStock = 0;
+        let isOnOrder = 'false';
+
+        let value = selectStockItem.options[selectStockItem.selectedIndex].value;
+        let result = value.split('|');
+        qtyInStock = result[2];
+
+        let stockNumOrder = result[11];
+        let stockId = result[0];
+        let delivered = result[10];
+        if (!isNaN(stockNumOrder) && !isNaN(stockId) && !isNaN(delivered)) {
+            isOnOrder = stockNumOrder === stockId && !delivered;
+        }
 
         let pass = true;
 
@@ -162,6 +200,36 @@ Purpose: To complete the group project
 
             if (!confirmMess) {
                 e.preventDefault();
+            } else {
+                document.getElementById("stockIdInput").value =
+                    document.getElementById("stockIdCell").textContent;
+
+                document.getElementById("descriptionInput").value =
+                    document.getElementById("descriptionCell").textContent;
+
+                document.getElementById("qtyInput").value =
+                    document.getElementById("qtyInStockCell").textContent;
+
+                document.getElementById("reOrderLevelInput").value =
+                    document.getElementById("reOrderLevelCell").textContent;
+
+                document.getElementById("reOrderQtyInput").value =
+                    document.getElementById("reOrderQtyCell").textContent;
+
+                document.getElementById("costPriceInput").value =
+                    document.getElementById("costPriceCell").textContent;
+
+                document.getElementById("retailPriceInput").value =
+                    document.getElementById("retailPriceCell").textContent;
+
+                document.getElementById("supplierNameInput").value =
+                    document.getElementById("supplierNameCell").textContent;
+
+                document.getElementById("orderNumInput").value =
+                    document.getElementById("orderNumCell").textContent;
+
+                document.getElementById("deliveredInput").value =
+                    document.getElementById("deliveredCell").textContent;
             }
         }
     });
@@ -183,28 +251,48 @@ Purpose: To complete the group project
     const displayStockForm = document.getElementById("displayStockForm");
     // creating display function
     function displayDetails() {
-        displayStockForm.choice.value = 'displayListbox';
-        const selectStockItem = document.getElementById('stockItem')
         let value = selectStockItem.options[selectStockItem.selectedIndex].value;
-        displayStockForm.stockItemId.value = value;
-        displayStockForm.submit();
+        let result = value.split('|');
+
+        document.getElementById("stockIdCell").innerHTML = result[0];
+        document.getElementById("descriptionCell").innerHTML = result[1];
+        document.getElementById("qtyInStockCell").innerHTML = result[2];
+        document.getElementById("reOrderLevelCell").innerHTML = result[3];
+        document.getElementById("reOrderQtyCell").innerHTML = result[4];
+        document.getElementById("costPriceCell").innerHTML = result[5];
+        document.getElementById("retailPriceCell").innerHTML = result[6];
+        document.getElementById("supplierNameCell").innerHTML = result[7];
+        document.getElementById("orderNumCell").innerHTML = result[8];
+        document.getElementById("deliveredCell").innerHTML = result[9];
+
+        if (!submitDeleteStock.classList.contains('open')) {
+            submitDeleteStock.classList.add('open');
+        }
+
+        document.getElementById('display').style.display = "none";
     }
 
     const stockNum = document.getElementById("stockNum")
     const description = document.getElementById("description")
     // creating search function
     function searchStock() {
-        displayStockForm.choice.value = 'searchStockItem'
         let stockNumValue = stockNum.value;
         let descriptionValue = description.value;
         displayStockForm.stockNum.value = stockNumValue;
         displayStockForm.description.value = descriptionValue;
+
+        let stockInt = parseInt(stockNum.value);
+        if (isNaN(stockInt) && descriptionValue === "") {
+            alert("The stock id is not a number");
+            return;
+        }
+
         displayStockForm.submit();
     }
 
     const stockNumBlock = document.getElementById("stockNumBlock")
     const descriptionBlock = document.getElementById("descriptionBlock")
-//     create function to toggle between description and stockNum
+    //     create function to toggle between description and stockNum
     function toggleDescriptionStockNum() {
         // creating variable searchDescriptionStockNum
         const searchDescriptionStockNum = document.getElementById("searchDescriptionStockNum");
@@ -221,17 +309,6 @@ Purpose: To complete the group project
             description.value = '';
         }
     }
-
-    <?php
-    if (isset($_SESSION['stockId'])) {
-    ?>
-        const submitDeleteStock = document.getElementById("submitDeleteStock");
-        submitDeleteStock.classList.add('open');
-    <?php
-    } else {
-    ?>
-        submitDeleteStock.classList.remove('open')
-    <?php } ?>
 
 </script>
 </body>

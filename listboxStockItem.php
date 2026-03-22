@@ -11,7 +11,21 @@
 include 'database.php';
 
 // create sql variable with sql statement
-$sql = "SELECT * FROM stock_item WHERE deleted = 0";
+$sql = "SELECT s.stock_id,
+                    s.description,
+                    s.quantity_in_stock,
+                    s.reorder_level,
+                    s.reorder_quantity,
+                    s.cost_price,
+                    s.retail_price,
+                    sup.supplier_id,
+                    sup.supplier_name,
+                    o.order_num,
+                    o.stock_num,
+                    og.delivered FROM stock_item s INNER JOIN supplier sup
+                    ON s.supplier_id = sup.supplier_id LEFT JOIN order_item o 
+                    ON s.stock_id = o.stock_num LEFT JOIN order_golf og
+                    ON og.order_id = o.order_num WHERE s.deleted = 0";
 
 // executing the query
 $result = mysqli_query($conn, $sql);
@@ -22,16 +36,26 @@ if (!$result) {
     die ('Query failed: ' . mysqli_error($conn));
 }
 
-echo "<select name='stockItem' class='listbox' id='stockItem' size='5' onclick='displayDetails()'>";
+echo "<select name='stockItem' class='listbox' id='stockItem' onchange='displayDetails()'>";
 
 // creating a loop for the query
 while ($row = mysqli_fetch_array($result)) {
     // getting information from database
     $stockId = $row['stock_id'];
     $description = $row['description'];
+    $quantityInStock = $row['quantity_in_stock'];
+    $reorderLevel = $row['reorder_level'];
+    $reorderQuantity = $row['reorder_quantity'];
+    $costPrice = $row['cost_price'];
+    $retailPrice = $row['retail_price'];
+    $supplierName = $row['supplier_name'];
+    $orderNum = $row['order_num'];
+    $delivered = $row['delivered'];
+    $supplierId = $row['supplier_id'];
+    $stockNumOrder = $row['stock_num'];
 
 //    option for in the select
-    echo "<option value='$stockId'>$stockId, $description</option>";
+    echo "<option value='$stockId|$description|$quantityInStock|$reorderLevel|$reorderQuantity|$costPrice|$retailPrice|$supplierName|$orderNum|$delivered|$supplierId|$stockNumOrder'>$stockId, $description</option>";
 }
 
 // closing an element

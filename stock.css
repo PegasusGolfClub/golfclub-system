@@ -113,6 +113,7 @@ main {
     color: #02674a;
     font-weight: 500;
     transition: all 0.2s ease;
+    text-align: center;
 }
 
 .menu__item > a:hover {
@@ -196,6 +197,7 @@ main {
     background-color: #ffffff; /* background color is white */
     font-size: 14px; /* font size 14 px */
     cursor: pointer; /* cursor pointer */
+    padding: 10px 5px; /* padding 10px 5px */
 }
 
 .listbox:hover {
@@ -352,4 +354,24 @@ main {
 .button__box.button__box--report > button:disabled {
     background-color: #c5c5c5;
     color: black;
+}
+
+.display_error {
+    font-size: 20px; /* font-size 20px */
+    color: red; /* color is red */
+}
+
+a.pegasus_golf_link {
+    padding: 0;
+    color: white;
+    transition: 0s;
+}
+
+a.pegasus_golf_link:hover {
+    background: none;
+}
+
+img {
+    width: 200px;
+    height: 200px;
 }

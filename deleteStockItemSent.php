@@ -13,15 +13,14 @@ include 'database.php';
 session_start();
 
 // create variables from the form
-$stockId = $_SESSION['stockId'];
-$description = $_SESSION['description'];
-$qtyInStock =$_SESSION['qtyInStock'];
-$reOrderLevel =  $_SESSION['reOrderLevel'];
-$reOrderQty = $_SESSION['reOrderQty'];
-$costPrice = $_SESSION['costPrice'];
-$retailPrice = $_SESSION['retailPrice'];
-$supplierId = $_SESSION['supplierId'];
-$supplierName = $_SESSION['supplierName'];
+$stockId = $_POST['stockIdCell'];
+$description = $_POST['descriptionCell'];
+$qtyInStock = $_POST['qtyInStockCell'];
+$reOrderLevel =  $_POST['reOrderLevelCell'];
+$reOrderQty = $_POST['reOrderQtyCell'];
+$costPrice = $_POST['costPriceCell'];
+$retailPrice = $_POST['retailPriceCell'];
+$supplierName = $_POST['supplierNameCell'];
 
 $sql = "UPDATE stock_item SET deleted = 1 WHERE stock_id = $stockId";
 
@@ -85,7 +84,7 @@ mysqli_close($conn);
                         </tr>
                     </table>
                 </div>
-
+<!--                link container -->
                 <div class="button__links">
                     <a href="deleteStockItem.php" class="button__link-item button__link-item--large" id="returnToStockDelete">delete stock</a>
                     <a href="index.php" class="button__link-item button__link-item--large" id="returnToDashboard">dashboard</a>
@@ -97,17 +96,3 @@ mysqli_close($conn);
 </main>
 </body>
 </html>
-
-<?php
-unset($_SESSION['stockId']);
-unset($_SESSION['description']);
-unset($_SESSION['qtyInStock']);
-unset($_SESSION['reOrderLevel']);
-unset($_SESSION['reOrderQty']);
-unset($_SESSION['costPrice']);
-unset($_SESSION['retailPrice']);
-unset($_SESSION['supplierId']);
-unset($_SESSION['supplierName']);
-unset($_SESSION['stockNumOrder']);
-unset($_SESSION['delivered']);
-?>

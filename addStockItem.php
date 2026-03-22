@@ -33,8 +33,8 @@ Purpose: To complete the group project
 <!--                    label for description -->
                     <label for="description">Description: </label>
 <!--                    input field for description -->
-                    <textarea name="description" id="description"
-                              autofocus title="Enter a description of a stock item" required></textarea>
+                    <textarea name="description" id="description" maxlength="100"
+                              autofocus title="Enter a description of a stock item" placeholder="Enter a description (at least 4 characters)" required></textarea>
                 </div>
                 
 <!--                input box for quantity in stock -->
@@ -42,7 +42,7 @@ Purpose: To complete the group project
 <!--                    label for quantity in stock -->
                     <label for="qtyInStock">Quantity in stock: </label>
 <!--                    input field for quantity in stock -->
-                    <input type="text" id="qtyInStock" name="qtyInStock"
+                    <input type="number" id="qtyInStock" name="qtyInStock" placeholder="Enter a quantity of a stock item (must be integer)" min="0" pattern="[0-9]+"
                     title="Enter a quantity of a stock item" required>
                 </div>
                 
@@ -51,7 +51,7 @@ Purpose: To complete the group project
 <!--                    label for re-order level -->
                     <label for="reOrderLevel">Re-order level: </label>
 <!--                    input field for re-order level -->
-                    <input type="text" id="reOrderLevel" name="reOrderLevel"
+                    <input type="number" id="reOrderLevel" name="reOrderLevel" placeholder="Enter a re-order level (must be integer)" min="0" pattern="[0-9]+"
                     title="Enter re-order level of a stock item" required>
                 </div>
                 
@@ -60,7 +60,7 @@ Purpose: To complete the group project
 <!--                    level for re-rder quantity -->
                     <label for="reOrderQty">Re-order quantity: </label>
 <!--                    input field for re-order quantity -->
-                    <input type="text" id="reOrderQty" name="reOrderQty"
+                    <input type="number" id="reOrderQty" name="reOrderQty" placeholder="Enter re-order quantity (must be integer)" min="0" pattern="[0-9]+"
                     title="Enter re-order quantity of a stock item" required>
                 </div>
                 
@@ -69,7 +69,7 @@ Purpose: To complete the group project
 <!--                    label for cost price -->
                     <label for="costPrice">Cost price: </label>
 <!--                    input field for cost price -->
-                    <input type="text" id="costPrice" name="costPrice"
+                    <input type="number" id="costPrice" name="costPrice" placeholder="Enter cost price (must be decimal)" step="0.01" min="0" pattern="[0-9]+"
                     title="Enter the cost of a stock item" required>
                 </div>
                 
@@ -78,7 +78,7 @@ Purpose: To complete the group project
 <!--                    label for retail price -->
                     <label for="retailPrice">Retail price: </label>
 <!--                    input field for retail price -->
-                    <input type="text" id="retailPrice" name="retailPrice"
+                    <input type="number" id="retailPrice" name="retailPrice" placeholder="Enter retail price (must be decimal)" step="0.01" min="0" pattern="[0-9]+"
                     title="Enter the retail price of a stock item" required>
                 </div>
 
@@ -109,12 +109,11 @@ Purpose: To complete the group project
     const qtyInStock = document.getElementById("qtyInStock");
     const reOrderLevel = document.getElementById("reOrderLevel");
     const reOrderQty = document.getElementById("reOrderQty");
-    const costPrice = document.getElementById("costPrice");
-    const retailPrice = document.getElementById("retailPrice");
     const supplierName = document.getElementById('supplierName');
-
     const stockForm = document.getElementById("stockForm");
     const buttonSent = document.getElementById("submitAddStock");
+    const costPrice = document.getElementById("costPrice");
+    const retailPrice = document.getElementById("retailPrice");
 
     // check form validity and choose between block and none
     buttonSent.style.display = stockForm.checkValidity() ? 'block' : 'none';
@@ -131,34 +130,46 @@ Purpose: To complete the group project
 
     // submit function that checks the fields
     stockForm.addEventListener('submit', (e) => {
-        // parse item quantity to int to check if it's not null
-        let stockQtyCheck = parseInt(qtyInStock.value);
-        if (isNaN(stockQtyCheck)) {
-            alert("Enter the quantity as an integer");
+        let pass = true;
+
+        //  checks if description is empty
+        if (description.value.length < 4){
+            alert("Description has to be more than 4 characters");
+            pass = false;
+            e.preventDefault()
+        }
+
+        // check if the description is a valid text
+        if (!/[a-zA-Z]/.test(description.value)){
+            alert("Description must contain text and not only numbers.");
+            pass = false;
+            e.preventDefault()
+        }
+
+        //  check if the cost price is higher than retail price
+        if (parseFloat(costPrice.value) > parseFloat(retailPrice.value)) {
+            alert("The cost price can't be higher than the retail price.");
+            pass = false;
             e.preventDefault();
         }
 
-        // parse order level to int to check if it's not null
-        let orderLevelCheck = parseInt(reOrderLevel.value);
-        if (isNaN(orderLevelCheck)) {
-            alert("Enter the order level as an integer");
-            e.preventDefault();
+        // supplier name value check
+        if (supplierName.value === "") {
+            alert("The supplier name is not provided.");
+            pass = false;
+            e.preventDefault()
         }
 
-        // parse order quantity to int to check if it's not null
-        let orderQtyCheck = parseInt(reOrderQty.value);
-        if (isNaN(orderQtyCheck)) {
-            alert("Enter the order quantity as an integer");
-            e.preventDefault();
+        // if pass then confirm message
+        if (pass) {
+            // confirm message with
+            let confirmSubmit = confirm("Are you sure the stock item details are correct?");
+
+            if(!confirmSubmit){
+                e.preventDefault();
+            }
         }
 
-        let supplier = document.getElementById("supplierName");
-
-        // check the supplier value if empty
-        if (supplier.value === "") {
-            alert("Please select a supplier");
-            e.preventDefault();
-        }
     })
 </script>
 </body>

@@ -23,6 +23,7 @@ Purpose: To complete the group project
 
 <body>
 
+<!-- importing sidebar stock -->
 <?php include 'sidebar_stock.php' ?>
 
 <!-- Main Content Area -->
@@ -31,12 +32,10 @@ Purpose: To complete the group project
         <div class="card" id="cardDelete">
             <h2>Amend stock item</h2>
             <form action="amendStockItemDisplay.php" id="displayStockForm" method="post">
-                <input type="hidden" name="choice">
-                <input type="hidden" name="stockItemId">
                 <input type="hidden" name="stockNum">
                 <input type="hidden" name="description">
             </form>
-            <form action="amendStockItemSent.php" class="main-form main-form--large" id="stockForm" method="post">
+            <form action="amendStockItemSent.php" class="main-form" id="stockForm" method="post">
                 <div class="search__button-box search__button-box--left">
                     <button type="button" name="findStockButton" id="findStockButton" class="primary_btn"
                             onclick="toggleFindOptions()">Find</button>
@@ -78,6 +77,8 @@ Purpose: To complete the group project
                 </div>
 
                 <h2>Details of added item</h2>
+
+                <div id="display" class="display_error">There are no matches found</div>
                 <!--                input box for stock id -->
                 <div class="input__box">
                     <!--                    label for stock id -->
@@ -103,7 +104,7 @@ Purpose: To complete the group project
                     <!--                    label for quantity in stock -->
                     <label for="qtyInStock">Quantity in stock: </label>
                     <!--                    input field for quantity in stock -->
-                    <input type="text" id="qtyInStock" name="qtyInStock"
+                    <input type="number" id="qtyInStock" name="qtyInStock" min="0" pattern="[0-9]+"
                            title="Enter a quantity of a stock item" value="<?= htmlspecialchars($_SESSION['qtyInStock'] ?? '') ?>" required disabled>
                 </div>
 
@@ -112,7 +113,7 @@ Purpose: To complete the group project
                     <!--                    label for re-order level -->
                     <label for="reOrderLevel">Re-order level: </label>
                     <!--                    input field for re-order level -->
-                    <input type="text" id="reOrderLevel" name="reOrderLevel"
+                    <input type="number" id="reOrderLevel" name="reOrderLevel" min="0" pattern="[0-9]+"
                            title="Enter re-order level of a stock item" value="<?= htmlspecialchars($_SESSION['reOrderLevel'] ?? '') ?>" required disabled>
                 </div>
 
@@ -121,7 +122,7 @@ Purpose: To complete the group project
                     <!--                    level for re-rder quantity -->
                     <label for="reOrderQty">Re-order quantity: </label>
                     <!--                    input field for re-order quantity -->
-                    <input type="text" id="reOrderQty" name="reOrderQty"
+                    <input type="number" id="reOrderQty" name="reOrderQty" min="0" pattern="[0-9]+"
                            title="Enter re-order quantity of a stock item" value="<?= htmlspecialchars($_SESSION['reOrderQty'] ?? '') ?>" required disabled>
                 </div>
 
@@ -130,7 +131,7 @@ Purpose: To complete the group project
                     <!--                    label for cost price -->
                     <label for="costPrice">Cost price: </label>
                     <!--                    input field for cost price -->
-                    <input type="text" id="costPrice" name="costPrice"
+                    <input type="number" id="costPrice" name="costPrice" step="0.01" min="0" pattern="[0-9]+"
                            title="Enter the cost of a stock item" value="<?= htmlspecialchars($_SESSION['costPrice'] ?? '') ?>" required disabled>
                 </div>
 
@@ -139,7 +140,7 @@ Purpose: To complete the group project
                     <!--                    label for retail price -->
                     <label for="retailPrice">Retail price: </label>
                     <!--                    input field for retail price -->
-                    <input type="text" id="retailPrice" name="retailPrice"
+                    <input type="number" id="retailPrice" name="retailPrice" step="0.01" min="0" pattern="[0-9]+"
                            title="Enter the retail price of a stock item" value="<?= htmlspecialchars($_SESSION['retailPrice'] ?? '') ?>" required disabled>
                 </div>
 
@@ -162,68 +163,115 @@ Purpose: To complete the group project
     <?php include 'navbar_stock.php' ?>
 </main>
 
+<!-- scripting -->
 <script>
+// submit amend stock button
+    const submitAmendStock = document.getElementById("submitAmendStock");
+    // if session is stockId then select it in listbox
+    <?php if (isset($_SESSION['stockId'])) { ?>
+    let options = document.querySelectorAll('#stockItem option');
+    // find the stock in listbox
+    options.forEach(opt => {
+        if (opt.value.startsWith(<?php echo $_SESSION['stockId']?> + "|")) {
+            opt.selected = true;
+        }
+    });
+
+    // hide the message
+    document.getElementById('display').style.display = "none";
+    <?php
+//  unset session variables
+    unset($_SESSION['stockId']);
+    unset($_SESSION['description']);
+    unset($_SESSION['qtyInStock']);
+    unset($_SESSION['reOrderLevel']);
+    unset($_SESSION['reOrderQty']);
+    unset($_SESSION['costPrice']);
+    unset($_SESSION['retailPrice']);
+    unset($_SESSION['supplierId']);
+    unset($_SESSION['supplierName']);
+    unset($_SESSION['orderNum']);
+    unset($_SESSION['delivered']);
+    } else { ?>
+//  display the message
+    document.getElementById('display').style.display = "block";
+    <?php }; ?>
+
+//  get the information about the form
     const stockId = document.getElementById("stockId");
     const descriptionTxt = document.getElementById("descriptionTxt");
     const qtyInStock = document.getElementById("qtyInStock");
     const reOrderLevel = document.getElementById("reOrderLevel");
     const reOrderQty = document.getElementById("reOrderQty");
+    const supplierName = document.getElementById('supplierName');
     const costPrice = document.getElementById("costPrice");
     const retailPrice = document.getElementById("retailPrice");
-    const supplierName = document.getElementById('supplierName');
 
+    // supplier name is disabled
     supplierName.disabled = true;
 
+    // stock form constant
     const stockForm = document.getElementById('stockForm');
-    const submitAmendStock = document.getElementById("submitAmendStock");
     const amendViewStockBtn = document.getElementById("amendViewStockBtn");
 
+    // submit amend stock style and is it valid
     submitAmendStock.style.display = stockForm.checkValidity() && !descriptionTxt.disabled ? 'block' : 'none';
 
+    // input check validity
     stockForm.addEventListener('input', (e) => {
         submitAmendStock.style.display = stockForm.checkValidity() && !descriptionTxt.disabled ? 'block' : 'none';
     })
 
+    // submit the form
     stockForm.addEventListener('submit', (e) => {
-        let stockQtyCheck = parseInt(qtyInStock.value);
-        if (isNaN(stockQtyCheck)) {
-            alert("Enter the quantity as an integer");
+        let pass = true;
+
+        //  checks if description is empty
+        if (descriptionTxt.value.length < 4){
+            alert("Description has to be more than 4 characters");
+            pass = false;
+            e.preventDefault()
+        }
+
+        // check if the description is a valid text
+        if (!/[a-zA-Z]/.test(descriptionTxt.value)){
+            alert("Description must contain text and not only numbers.");
+            pass = false;
+            e.preventDefault()
+        }
+
+        //  check if the cost price is higher than retail price
+        if (parseFloat(costPrice.value) > parseFloat(retailPrice.value)) {
+            alert("The cost price can't be higher than the retail price.");
+            pass = false;
             e.preventDefault();
         }
 
-        let orderLevelCheck = parseInt(reOrderLevel.value);
-        if (isNaN(orderLevelCheck)) {
-            alert("Enter the order level as an integer");
-            e.preventDefault();
+        // supplier name value check
+        if (supplierName.value === "") {
+            alert("The supplier name is not provided.");
+            pass = false;
+            e.preventDefault()
         }
 
-        let orderQtyCheck = parseInt(reOrderQty.value);
-        if (isNaN(orderQtyCheck)) {
-            alert("Enter the order quantity as an integer");
-            e.preventDefault();
-        }
+        // if pass then confirm message
+        if (pass) {
+            // confirm message with
+            let confirmSubmit = confirm("Are you sure the stock item details are correct?");
 
-        let supplier = document.getElementById("supplierName");
-
-        if (supplier.value === "") {
-            alert("Please select a supplier");
-            e.preventDefault();
-        }
-
-        let confAmend = confirm("Do you confirm the amendment?");
-
-        if (!confAmend) {
-            e.preventDefault();
-        } else {
-            // disable the fields before sending the result in order to get them
-            stockId.disabled = false;
-            descriptionTxt.disabled = false;
-            qtyInStock.disabled = false;
-            reOrderLevel.disabled = false;
-            reOrderQty.disabled = false;
-            costPrice.disabled = false;
-            retailPrice.disabled = false;
-            supplierName.disabled = false;
+            if (!confirmSubmit) {
+                e.preventDefault();
+            } else {
+                // disable the fields before sending the result in order to get them
+                stockId.disabled = false;
+                descriptionTxt.disabled = false;
+                qtyInStock.disabled = false;
+                reOrderLevel.disabled = false;
+                reOrderQty.disabled = false;
+                costPrice.disabled = false;
+                retailPrice.disabled = false;
+                supplierName.disabled = false;
+            }
         }
     });
 
@@ -254,6 +302,7 @@ Purpose: To complete the group project
         }
     }
 
+    // toggle the find input
     function toggleFindOptions() {
         const wrapperBox = document.getElementById("wrapperFind");
         wrapperBox.classList.toggle('open');
@@ -270,22 +319,44 @@ Purpose: To complete the group project
     const displayStockForm = document.getElementById("displayStockForm");
     // creating display function
     function displayDetails() {
-        displayStockForm.choice.value = 'displayListbox';
         const selectStockItem = document.getElementById('stockItem')
+        // the value from the listbox
         let value = selectStockItem.options[selectStockItem.selectedIndex].value;
-        displayStockForm.stockItemId.value = value;
-        displayStockForm.submit();
+        let result = value.split('|');
+
+        // variables with listbox information
+        stockId.value = result[0];
+        descriptionTxt.value = result[1];
+        qtyInStock.value = result[2];
+        reOrderLevel.value = result[3];
+        reOrderQty.value = result[4];
+        costPrice.value = result[5];
+        retailPrice.value = result[6];
+        let supValue = [result[10], result[7]].join("|");
+        document.querySelector(`#supplierName option[value="${supValue}"]`).selected = true;
+
+        // hide the message
+        document.getElementById('display').style.display = "none";
     }
 
+    // stock num form constant
     const stockNum = document.getElementById("stockNum")
     const description = document.getElementById("description");
     // creating search function
     function searchStock() {
-        displayStockForm.choice.value = 'searchStockItem'
         let stockNumValue = stockNum.value;
         let descriptionValue = description.value;
         displayStockForm.stockNum.value = stockNumValue;
         displayStockForm.description.value = descriptionValue;
+
+        // check if the number is valid
+        let stockInt = parseInt(stockNum.value);
+        if (isNaN(stockInt) && descriptionValue === "") {
+            alert("The stock id is not a number");
+            return;
+        }
+
+        // submit the form
         displayStockForm.submit();
     }
 
@@ -296,11 +367,13 @@ Purpose: To complete the group project
         // creating variable searchDescriptionStockNum
         const searchDescriptionStockNum = document.getElementById("searchDescriptionStockNum");
 
+        // switch to description when clicking the button
         if (searchDescriptionStockNum.innerHTML == 'description') {
             searchDescriptionStockNum.innerHTML = 'stock number'
             descriptionBlock.classList.add("open");
             stockNumBlock.classList.remove("open");
             stockNum.value = '';
+        // switching to stock number when clicking the button
         } else if (searchDescriptionStockNum.innerHTML == 'stock number') {
             searchDescriptionStockNum.innerHTML = 'description'
             stockNumBlock.classList.add("open");
@@ -308,17 +381,6 @@ Purpose: To complete the group project
             description.value = '';
         }
     }
-
-    <?php
-    if (isset($_SESSION['stockId'])) {
-    ?>
-    const submitDeleteStock = document.getElementById("submitDeleteStock");
-    submitDeleteStock.classList.add('open');
-    <?php
-    } else {
-    ?>
-    submitDeleteStock.classList.remove('open')
-    <?php } ?>
 
 </script>
 </body>

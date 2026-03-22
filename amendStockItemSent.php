@@ -74,6 +74,7 @@ mysqli_close($conn);
                 <div class="container__info">
                     <!-- creating confirmation details section -->
                     <div class="confirmation__details">
+<!--                        the table with information -->
                         <table>
                             <tr class="cnf-h-row">
                                 <th class="cnf-h-cell">Stock Id</th>
@@ -109,17 +110,3 @@ mysqli_close($conn);
     </main>
     </body>
     </html>
-
-<?php
-unset($_SESSION['stockId']);
-unset($_SESSION['description']);
-unset($_SESSION['qtyInStock']);
-unset($_SESSION['reOrderLevel']);
-unset($_SESSION['reOrderQty']);
-unset($_SESSION['costPrice']);
-unset($_SESSION['retailPrice']);
-unset($_SESSION['supplierId']);
-unset($_SESSION['supplierName']);
-unset($_SESSION['stockNumOrder']);
-unset($_SESSION['delivered']);
-?>
