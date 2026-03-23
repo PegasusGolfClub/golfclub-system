@@ -1,9 +1,13 @@
 <!-- initializing html document -->
 <!--
+Screen Name: Delete Stock Item
 Name: Tymofii Mazurenko
 Student ID: C00325393
-Date: 28/02/2026
-Purpose: To complete the group project
+Date: March 2026
+Purpose: This screen allows the user to search for an existing stock item by stock
+number or description, view its details, and delete the selected item. It includes
+validation to prevent deletion if the item has remaining stock quantity or is currently
+on order, and confirms the user’s action before submitting the deletion request.
 -->
 
 <!-- set session start -->
@@ -140,13 +144,17 @@ Purpose: To complete the group project
         }
     });
 
+    // if the stock Id is not set remove the button from the screen, otherwise add it
     if (document.getElementById('stockIdCell').innerHTML !== "") {
         submitDeleteStock.classList.add('open');
     } else {
         submitDeleteStock.classList.remove('open')
     }
 
+    // style of display is none
     document.getElementById('display').style.display = "none";
+
+    // unset unuseful session variables
     <?php
     unset($_SESSION['stockId']);
     unset($_SESSION['description']);
@@ -161,46 +169,56 @@ Purpose: To complete the group project
     unset($_SESSION['delivered']);
 
     } else { ?>
+        // set the display style to block
         document.getElementById('display').style.display = "block";
     <?php }; ?>
 
     const selectStockItem = document.getElementById('stockItem')
 
+    // submit the form listener
     stockForm.addEventListener('submit', (e) => {
         let qtyInStock = 0;
         let isOnOrder = 'false';
 
+        // get the value from result and split the result to get the information
         let value = selectStockItem.options[selectStockItem.selectedIndex].value;
         let result = value.split('|');
         qtyInStock = result[2];
 
         let stockNumOrder = result[11];
         let stockId = result[0];
-        let delivered = result[10];
+        let delivered = parseInt(result[9]);
+
+        // check the if the variables are set
         if (!isNaN(stockNumOrder) && !isNaN(stockId) && !isNaN(delivered)) {
             isOnOrder = stockNumOrder === stockId && !delivered;
         }
 
         let pass = true;
 
+        // check the quantity in stock
         if (qtyInStock > 0) {
             e.preventDefault();
             alert("You cannot delete a stock item that has more than zero quantity in stock.");
             pass = false;
         }
 
+        // check if the item is on order
         if (isOnOrder) {
             e.preventDefault();
             alert("You cannot delete a stock item that is currently placed on order.");
             pass = false;
         }
 
+        // if pass then confirmation message pops up
         if (pass) {
             let confirmMess = confirm("Do you want to delete the form");
 
+            // if user is not confirming the deletion then prevent from sending
             if (!confirmMess) {
                 e.preventDefault();
             } else {
+                // insert the values from the table into the valid corresponding input form fields
                 document.getElementById("stockIdInput").value =
                     document.getElementById("stockIdCell").textContent;
 
@@ -234,17 +252,15 @@ Purpose: To complete the group project
         }
     });
 
-
+    // function that toggles the find option and listbox
     function toggleFindOptions() {
+        // remove open class if there is one, otherwise add it
         const wrapperBox = document.getElementById("wrapperFind");
         wrapperBox.classList.toggle('open');
 
+        // remove open class if there is one, otherwise add it
         const selectStockItem = document.getElementById("selectStockItem");
-        if (!wrapperBox.classList.contains('open')) {
-            selectStockItem.classList.add('open');
-        } else {
-            selectStockItem.classList.remove('open');
-        }
+        selectStockItem.classList.toggle('open')
     }
 
     // creating constant indicating the displayForm
@@ -254,6 +270,7 @@ Purpose: To complete the group project
         let value = selectStockItem.options[selectStockItem.selectedIndex].value;
         let result = value.split('|');
 
+        // populate the input fields with the result from selected option
         document.getElementById("stockIdCell").innerHTML = result[0];
         document.getElementById("descriptionCell").innerHTML = result[1];
         document.getElementById("qtyInStockCell").innerHTML = result[2];
@@ -265,10 +282,12 @@ Purpose: To complete the group project
         document.getElementById("orderNumCell").innerHTML = result[8];
         document.getElementById("deliveredCell").innerHTML = result[9];
 
+        // add a submit button
         if (!submitDeleteStock.classList.contains('open')) {
             submitDeleteStock.classList.add('open');
         }
 
+        // error message is hidden
         document.getElementById('display').style.display = "none";
     }
 
@@ -281,12 +300,14 @@ Purpose: To complete the group project
         displayStockForm.stockNum.value = stockNumValue;
         displayStockForm.description.value = descriptionValue;
 
+        // check if the stock id is not a number
         let stockInt = parseInt(stockNum.value);
         if (isNaN(stockInt) && descriptionValue === "") {
             alert("The stock id is not a number");
             return;
         }
 
+        // submit the form
         displayStockForm.submit();
     }
 
@@ -297,11 +318,13 @@ Purpose: To complete the group project
         // creating variable searchDescriptionStockNum
         const searchDescriptionStockNum = document.getElementById("searchDescriptionStockNum");
 
+        // change to description
         if (searchDescriptionStockNum.innerHTML == 'description') {
             searchDescriptionStockNum.innerHTML = 'stock number'
             descriptionBlock.classList.add("open");
             stockNumBlock.classList.remove("open");
             stockNum.value = '';
+        // change to stock number
         } else if (searchDescriptionStockNum.innerHTML == 'stock number') {
             searchDescriptionStockNum.innerHTML = 'description'
             stockNumBlock.classList.add("open");

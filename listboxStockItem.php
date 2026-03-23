@@ -1,8 +1,11 @@
 <?php
 // Name: Tymofii Mazurenko
 // Student ID: C00325393
-// Date: 28/02/2026
-// Purpose: To complete the group project
+// Date: March 2026
+// Purpose: This script retrieves all non-deleted stock items from the database
+// and dynamically generates a HTML select list (listbox). Each option contains
+// stock item details encoded in the value attribute, allowing the selected item
+// to be displayed or processed in other screens such as amend and delete.
 
 // define variable $conn of mysqli type
 /** @var mysqli $conn */

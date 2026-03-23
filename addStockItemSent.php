@@ -1,8 +1,12 @@
 <?php
+// Screen Name: Add Stock Item (Confirmation)
 // Name: Tymofii Mazurenko
 // Student ID: C00325393
-// Date: 28/02/2026
-// Purpose: To complete the group project
+// Date: February 2026
+// Purpose: This screen processes the submitted stock item form data, inserts a new
+// stock record into the database, and displays a confirmation page showing the
+// details of the newly added stock item, including the generated stock ID and
+// associated supplier information.
 
 // define variable $conn of mysqli type
 /** @var mysqli $conn */

@@ -1,9 +1,13 @@
 <!-- initializing html document -->
 <!--
+Screen Name: Amend/View Stock Item
 Name: Tymofii Mazurenko
 Student ID: C00325393
-Date: 28/02/2026
-Purpose: To complete the group project
+Date: March 2026
+Purpose: This screen allows the user to search for an existing stock item by stock number
+or description, view its details, and amend the stock information. It retrieves stock data,
+displays it in editable form fields, and performs client-side validation before submitting
+updated data to the system for processing.
 -->
 
 <!-- set session start -->
@@ -93,7 +97,7 @@ Purpose: To complete the group project
                     <!--                    label for description -->
                     <label for="description">Description: </label>
                     <!--                    input field for description -->
-                    <textarea name="descriptionTxt" id="descriptionTxt"
+                    <textarea name="descriptionTxt" id="descriptionTxt" placeholder="Enter a description (at least 4 characters)"
                               autofocus title="Enter a description of a stock item" required disabled><?=
                         htmlspecialchars($_SESSION['description'] ?? '')
                         ?></textarea>
@@ -104,7 +108,7 @@ Purpose: To complete the group project
                     <!--                    label for quantity in stock -->
                     <label for="qtyInStock">Quantity in stock: </label>
                     <!--                    input field for quantity in stock -->
-                    <input type="number" id="qtyInStock" name="qtyInStock" min="0" pattern="[0-9]+"
+                    <input type="number" id="qtyInStock" name="qtyInStock" min="0" pattern="[0-9]+" placeholder="Enter a quantity of a stock item (must be integer)"
                            title="Enter a quantity of a stock item" value="<?= htmlspecialchars($_SESSION['qtyInStock'] ?? '') ?>" required disabled>
                 </div>
 
@@ -113,7 +117,7 @@ Purpose: To complete the group project
                     <!--                    label for re-order level -->
                     <label for="reOrderLevel">Re-order level: </label>
                     <!--                    input field for re-order level -->
-                    <input type="number" id="reOrderLevel" name="reOrderLevel" min="0" pattern="[0-9]+"
+                    <input type="number" id="reOrderLevel" name="reOrderLevel" min="0" pattern="[0-9]+" placeholder="Enter a re-order level (must be integer)"
                            title="Enter re-order level of a stock item" value="<?= htmlspecialchars($_SESSION['reOrderLevel'] ?? '') ?>" required disabled>
                 </div>
 
@@ -122,7 +126,7 @@ Purpose: To complete the group project
                     <!--                    level for re-rder quantity -->
                     <label for="reOrderQty">Re-order quantity: </label>
                     <!--                    input field for re-order quantity -->
-                    <input type="number" id="reOrderQty" name="reOrderQty" min="0" pattern="[0-9]+"
+                    <input type="number" id="reOrderQty" name="reOrderQty" min="0" pattern="[0-9]+" placeholder="Enter re-order quantity (must be integer)"
                            title="Enter re-order quantity of a stock item" value="<?= htmlspecialchars($_SESSION['reOrderQty'] ?? '') ?>" required disabled>
                 </div>
 
@@ -131,7 +135,7 @@ Purpose: To complete the group project
                     <!--                    label for cost price -->
                     <label for="costPrice">Cost price: </label>
                     <!--                    input field for cost price -->
-                    <input type="number" id="costPrice" name="costPrice" step="0.01" min="0" pattern="[0-9]+"
+                    <input type="number" id="costPrice" name="costPrice" step="0.01" min="0" pattern="[0-9]+" placeholder="Enter cost price (must be decimal)"
                            title="Enter the cost of a stock item" value="<?= htmlspecialchars($_SESSION['costPrice'] ?? '') ?>" required disabled>
                 </div>
 
@@ -140,7 +144,7 @@ Purpose: To complete the group project
                     <!--                    label for retail price -->
                     <label for="retailPrice">Retail price: </label>
                     <!--                    input field for retail price -->
-                    <input type="number" id="retailPrice" name="retailPrice" step="0.01" min="0" pattern="[0-9]+"
+                    <input type="number" id="retailPrice" name="retailPrice" step="0.01" min="0" pattern="[0-9]+" placeholder="Enter retail price (must be decimal)"
                            title="Enter the retail price of a stock item" value="<?= htmlspecialchars($_SESSION['retailPrice'] ?? '') ?>" required disabled>
                 </div>
 
@@ -304,15 +308,13 @@ Purpose: To complete the group project
 
     // toggle the find input
     function toggleFindOptions() {
+        // remove open class if there is one, otherwise add it
         const wrapperBox = document.getElementById("wrapperFind");
         wrapperBox.classList.toggle('open');
 
+        // remove open class if there is one, otherwise add it
         const selectStockItem = document.getElementById("selectStockItem");
-        if (!wrapperBox.classList.contains('open')) {
-            selectStockItem.classList.add('open');
-        } else {
-            selectStockItem.classList.remove('open');
-        }
+        selectStockItem.classList.toggle('open')
     }
 
     // creating constant indicating the displayForm

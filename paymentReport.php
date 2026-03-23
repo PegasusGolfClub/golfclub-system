@@ -1,9 +1,13 @@
 <!-- initializing html document -->
 <!--
+Screen Name: Payments Report
 Name: Tymofii Mazurenko
 Student ID: C00325393
-Date: 02/03/2026
-Purpose: Payments Report
+Date: March 2026
+Purpose: This screen generates a payments report displaying all player payments,
+including payment number, player name, payment date, and amount. It allows the
+user to sort the report by payment number, player name, or payment date, and
+calculates the total payment amount dynamically.
 -->
 
 <?php

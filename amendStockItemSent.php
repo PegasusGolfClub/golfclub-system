@@ -1,8 +1,12 @@
 <?php
+// Screen Name: Amend/View Stock Item (Confirmation)
 // Name: Tymofii Mazurenko
 // Student ID: C00325393
-// Date: 28/02/2026
-// Purpose: To complete the group project
+// Date: March 2026
+// Purpose: This script processes the amended stock item form data, updates the
+// existing stock record in the database, and displays a confirmation page showing
+// the updated stock item details, including description, quantities, pricing, and
+// associated supplier information.
 
 // define variable $conn of mysqli type
 /** @var mysqli $conn */

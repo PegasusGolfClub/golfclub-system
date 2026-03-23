@@ -1,8 +1,12 @@
 <?php
+// Screen Name: Delete Stock Item (Confirmation)
 // Name: Tymofii Mazurenko
 // Student ID: C00325393
-// Date: 28/02/2026
-// Purpose: To complete the group project
+// Date: March 2026
+// Purpose: This script processes the deletion of a stock item by performing a soft
+// delete (setting the deleted flag to 1 in the database). It then displays a confirmation
+// page showing the details of the deleted stock item, including description, quantities,
+// pricing, and supplier information.
 
 // define variable $conn of mysqli type
 /** @var mysqli $conn */

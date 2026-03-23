@@ -1,8 +1,11 @@
 <?php
 // Name: Tymofii Mazurenko
 // Student ID: C00325393
-// Date: 28/02/2026
-// Purpose: To complete the group project
+// Date: March 2026
+// Purpose: This script retrieves all supplier records from the database and
+// dynamically generates a HTML select list (listbox) of suppliers. It also
+// preserves the previously selected supplier using session data, allowing
+// consistent selection when adding or amending stock items.
 
 // define variable $conn of mysqli type
 /** @var mysqli $conn */

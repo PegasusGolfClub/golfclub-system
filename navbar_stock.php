@@ -1,8 +1,11 @@
 <!--
 Name: Tymofii Mazurenko
 Student ID: C00325393
-Date: 28/02/2026
-Purpose: To complete the group project
+Date: February 2026
+Purpose: This component provides a reusable navigation bar for the stock management
+module, allowing users to access key system functions such as adding, deleting,
+amending stock items, and viewing reports. It is included across multiple pages
+to ensure consistent navigation and user interface design.
 -->
 
 <div class="navbar">

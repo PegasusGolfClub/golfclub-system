@@ -1,9 +1,13 @@
 <!-- initializing html document -->
 <!--
+Screen Name: Add Stock Item
 Name: Tymofii Mazurenko
 Student ID: C00325393
-Date: 28/02/2026
-Purpose: To complete the group project
+Date: February 2026
+Purpose: This screen allows the user to add a new stock item to the system by entering
+a description, quantity in stock, reorder level, reorder quantity, cost price,
+retail price, and selecting a supplier. It includes client-side validation to ensure
+data accuracy and completeness before submitting the form to the server for processing.
 -->
 
 <!DOCTYPE html>

@@ -1,9 +1,14 @@
 <!-- creating php document -->
 <?php
+// Screen Name: Delete Stock Item (Display, Search Processing)
 // Name: Tymofii Mazurenko
 // Student ID: C00325393
-// Date: 28/02/2026
-// Purpose: To complete the group project
+// Date: March 2026
+// Purpose: This script processes the search request for a stock item using either
+// stock number or description, retrieves the matching record from the database,
+// and stores the result in session variables. These values are then used to display
+// the stock item details on the delete screen. If no match is found, session variables
+// are cleared before redirecting back to the delete stock item screen.
 
 // defining conn variable
 /** @var mysqli $conn */

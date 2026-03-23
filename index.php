@@ -2,8 +2,11 @@
 <!--
 Name: Tymofii Mazurenko
 Student ID: C00325393
-Date: 28/02/2026
-Purpose: To complete the group project
+Date: March 2026
+Purpose: This screen serves as the main entry point for the stock management
+module of the Pegasus Golf Club system. It provides a welcome interface and
+acts as a navigation hub for stock-related operations such as adding, amending,
+viewing, and deleting stock items.
 -->
 
 <!DOCTYPE html>
