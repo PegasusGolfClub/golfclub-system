@@ -35,7 +35,7 @@ updated data to the system for processing.
     <div class="main-content">
         <div class="card" id="cardDelete">
             <h2>Amend stock item</h2>
-            <form action="amendStockItemDisplay.php" id="displayStockForm" method="post">
+            <form action="stockItemDisplay.php" id="displayStockForm" method="post">
                 <input type="hidden" name="stockNum">
                 <input type="hidden" name="description">
             </form>

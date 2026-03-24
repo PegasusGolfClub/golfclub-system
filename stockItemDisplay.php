@@ -1,14 +1,14 @@
 <!-- creating php document -->
 <?php
-// Screen Name: Amend/View Stock Item (Display, Search Processing)
+// Screen Name: Delete Stock Item (Display, Search Processing)
 // Name: Tymofii Mazurenko
 // Student ID: C00325393
 // Date: March 2026
 // Purpose: This script processes the search request for a stock item using either
 // stock number or description, retrieves the matching record from the database,
-// and stores the result in session variables. These values are then used to populate
-// the amend stock item screen for viewing or editing. If no match is found, session
-// variables are cleared before redirecting back to the amend screen.
+// and stores the result in session variables. These values are then used to display
+// the stock item details on the delete screen. If no match is found, session variables
+// are cleared before redirecting back to the delete stock item screen.
 
 // defining conn variable
 /** @var mysqli $conn */
@@ -17,35 +17,22 @@ include 'database.php';
 
 session_start();
 
-// setting the choice variable
-if (isset($_POST['choice'])) {
-    $choice = $_POST['choice'];
-}
-
-
 $sql = '';
+
 //    getting variables from the form
-$description = $_POST['description'];
 $stockNum = $_POST['stockNum'];
+$description = $_POST['description'];
 //    create sql statement for querying the database
+
 if (trim($stockNum) == '' && trim($description) != '') {
-    $sql = "SELECT s.stock_id,
-                    s.description,
-                    s.quantity_in_stock,
-                    s.reorder_level,
-                    s.reorder_quantity,
-                    s.cost_price,
-                    s.retail_price,
-                    sup.supplier_id,
-                    sup.supplier_name,
-                    o.order_num,
-                    og.delivered FROM stock_item s INNER JOIN supplier sup
-                    ON s.supplier_id = sup.supplier_id LEFT JOIN order_item o 
-                    ON s.stock_id = o.stock_num LEFT JOIN order_golf og
-                    ON og.order_id = o.order_num WHERE s.description = '$description' AND s.deleted = 0";
+    $description = mysqli_real_escape_string($conn, $description);
+    $condition = "WHERE s.description = '$description'";
 } else if (trim($stockNum) != '' && trim($description) == '') {
-//    sql statement
-    $sql = "SELECT s.stock_id,
+    $condition = "WHERE s.stock_id = $stockNum";
+}
+
+// sql statement
+$sql = "SELECT s.stock_id,
                     s.description,
                     s.quantity_in_stock,
                     s.reorder_level,
@@ -55,11 +42,11 @@ if (trim($stockNum) == '' && trim($description) != '') {
                     sup.supplier_id,
                     sup.supplier_name,
                     o.order_num,
+                    o.stock_num,
                     og.delivered FROM stock_item s INNER JOIN supplier sup
                     ON s.supplier_id = sup.supplier_id LEFT JOIN order_item o 
                     ON s.stock_id = o.stock_num LEFT JOIN order_golf og
-                    ON og.order_id = o.order_num WHERE s.stock_id = $stockNum AND s.deleted = 0";
-}
+                    ON og.order_id = o.order_num $condition AND s.deleted = 0 GROUP BY s.stock_id";
 
 //    function call to get result
 if ($sql != '') {
@@ -91,6 +78,7 @@ function stockItemDisplay($conn, $sql) {
         $_SESSION['supplierId'] = $row['supplier_id'];
         $_SESSION['supplierName'] = $row['supplier_name'];
         $_SESSION['orderNum'] = $row['order_num'];
+        $_SESSION['stockNumOrder'] = $row['stock_num'];
         $_SESSION['delivered'] = $row['delivered'];
     } else {
 //        unset if no matches found
@@ -104,12 +92,13 @@ function stockItemDisplay($conn, $sql) {
         unset($_SESSION['supplierId']);
         unset($_SESSION['supplierName']);
         unset($_SESSION['orderNum']);
+        unset($_SESSION['stockNumOrder']);
         unset($_SESSION['delivered']);
     }
 }
 
-// redirect to the amendStockItem
-header('Location: amendStockItem.php');
+// redirect to the deleteStockItem
+header('Location: deleteStockItem.php');
 
 // close mysqli connection
 mysqli_close($conn);

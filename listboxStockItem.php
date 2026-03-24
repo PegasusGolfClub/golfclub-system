@@ -28,7 +28,7 @@ $sql = "SELECT s.stock_id,
                     og.delivered FROM stock_item s INNER JOIN supplier sup
                     ON s.supplier_id = sup.supplier_id LEFT JOIN order_item o 
                     ON s.stock_id = o.stock_num LEFT JOIN order_golf og
-                    ON og.order_id = o.order_num WHERE s.deleted = 0";
+                    ON og.order_id = o.order_num WHERE s.deleted = 0 GROUP BY s.stock_id";
 
 // executing the query
 $result = mysqli_query($conn, $sql);
