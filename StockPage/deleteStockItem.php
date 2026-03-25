@@ -101,8 +101,6 @@ on order, and confirms the user’s action before submitting the deletion reques
                                 <th class="cnf-h-cell">Cost price</th>
                                 <th class="cnf-h-cell">Retail price</th>
                                 <th class="cnf-h-cell">Supplier Name</th>
-                                <th class="cnf-h-cell">Order number</th>
-                                <th class="cnf-h-cell">delivered</th>
                             </tr>
                             <tr>
                                 <td class="cnf-i-cell" id="stockIdCell"><?php echo htmlspecialchars($_SESSION['stockId'] ?? '') ?></td>
@@ -113,8 +111,6 @@ on order, and confirms the user’s action before submitting the deletion reques
                                 <td class="cnf-i-cell" id="costPriceCell"><?php echo htmlspecialchars($_SESSION['costPrice'] ?? '') ?></td>
                                 <td class="cnf-i-cell" id="retailPriceCell"><?php echo htmlspecialchars($_SESSION['retailPrice'] ?? '') ?></td>
                                 <td class="cnf-i-cell" id="supplierNameCell"><?php echo htmlspecialchars($_SESSION['supplierName'] ?? '') ?></td>
-                                <td class="cnf-i-cell" id="orderNumCell"><?php echo htmlspecialchars($_SESSION['orderNum'] ?? '') ?></td>
-                                <td class="cnf-i-cell" id="deliveredCell"><?php echo htmlspecialchars($_SESSION['delivered'] ?? '') ?></td>
                             </tr>
                         </table>
 
@@ -165,8 +161,6 @@ on order, and confirms the user’s action before submitting the deletion reques
     unset($_SESSION['retailPrice']);
     unset($_SESSION['supplierId']);
     unset($_SESSION['supplierName']);
-    unset($_SESSION['orderNum']);
-    unset($_SESSION['delivered']);
 
     } else { ?>
         // set the display style to block
@@ -178,7 +172,7 @@ on order, and confirms the user’s action before submitting the deletion reques
     // submit the form listener
     stockForm.addEventListener('submit', (e) => {
         let qtyInStock = 0;
-        let isOnOrder = 'false';
+        let isOnOrder = false;
 
         // get the value from result and split the result to get the information
         let value = selectStockItem.options[selectStockItem.selectedIndex].value;
@@ -242,12 +236,6 @@ on order, and confirms the user’s action before submitting the deletion reques
 
                 document.getElementById("supplierNameInput").value =
                     document.getElementById("supplierNameCell").textContent;
-
-                document.getElementById("orderNumInput").value =
-                    document.getElementById("orderNumCell").textContent;
-
-                document.getElementById("deliveredInput").value =
-                    document.getElementById("deliveredCell").textContent;
             }
         }
     });
@@ -279,8 +267,6 @@ on order, and confirms the user’s action before submitting the deletion reques
         document.getElementById("costPriceCell").innerHTML = result[5];
         document.getElementById("retailPriceCell").innerHTML = result[6];
         document.getElementById("supplierNameCell").innerHTML = result[7];
-        document.getElementById("orderNumCell").innerHTML = result[8];
-        document.getElementById("deliveredCell").innerHTML = result[9];
 
         // add a submit button
         if (!submitDeleteStock.classList.contains('open')) {
