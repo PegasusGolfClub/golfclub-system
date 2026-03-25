@@ -100,6 +100,7 @@ function stockItemDisplay($conn, $sql) {
 // redirect to the deleteStockItem
 if ($_POST["typeScreen"] == "deleteStockItem") {
     header('Location: deleteStockItem.php');
+// redirect to the amendStockItem
 } else if ($_POST["typeScreen"] == "amendStockItem") {
     header('Location: amendStockItem.php');
 }
