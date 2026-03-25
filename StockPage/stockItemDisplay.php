@@ -98,7 +98,11 @@ function stockItemDisplay($conn, $sql) {
 }
 
 // redirect to the deleteStockItem
-header('Location: deleteStockItem.php');
+if ($_POST["typeScreen"] == "deleteStockItem") {
+    header('Location: deleteStockItem.php');
+} else if ($_POST["typeScreen"] == "amendStockItem") {
+    header('Location: amendStockItem.php');
+}
 
 // close mysqli connection
 mysqli_close($conn);

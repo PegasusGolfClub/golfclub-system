@@ -371,7 +371,15 @@ a.pegasus_golf_link:hover {
     background: none;
 }
 
-img {
-    width: 200px;
-    height: 200px;
+.logo__image {
+    padding: 20px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgb(62, 152, 112); /*#02674a*/
+    display: flex;
+    justify-content: center;
+}
+
+.logo__image img {
+    width: 100px;
+    height: 100px;
 }

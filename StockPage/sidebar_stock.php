@@ -1,6 +1,6 @@
 <!-- Navigation Sidebar -->
 <div class="sidebar">
-    <h2><a class="pegasus_golf_link" href="index.php">Pegasus Golf Club</a></h2>
+    <div class="logo__image"><a class="pegasus_golf_link" href="index.php"><img src="../assets/image/pegasus_gc_logo.png"></a></div>
 <!--    links to other pages -->
     <a href="staff.php" class="">Staff</a>
     <a href="players.php" class="">Players</a>

@@ -36,6 +36,7 @@ on order, and confirms the user’s action before submitting the deletion reques
         <div class="card" id="cardDelete">
             <h2>Delete stock item</h2>
             <form action="stockItemDisplay.php" id="displayStockForm" method="post">
+                <input type="hidden" name="typeScreen" value="deleteStockItem">
                 <input type="hidden" name="stockNum">
                 <input type="hidden" name="description">
             </form>
